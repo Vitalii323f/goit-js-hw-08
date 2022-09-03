@@ -12,22 +12,17 @@ function onTimeUpdate(params) {
   localStorage.setItem('videoplayer-current-time', params.seconds);
 }
 
-const saveTime = localStorage.getItem('videoplayer-current-time');
-console.log(saveTime);
+const savedTime = localStorage.getItem('videoplayer-current-time');
+console.log(savedTime);
 
-iframePlayer
-  .setCurrentTime(saveTime)
-  .then(function (seconds) {
-    // seconds = the actual time that the player seeked to
-  })
-  .catch(function (error) {
-    switch (error.name) {
-      case 'RangeError':
-        // the time was less than 0 or greater than the video’s duration
-        break;
+if (savedTime) {
+  setCurrentTime();
+}
 
-      default:
-        // some other error occurred
-        break;
-    }
-  });
+function onPlay({ seconds }) {
+  localStorage.setItem(savedTime, seconds);
+}
+
+function setCurrentTime() {
+  iframePlayer.setCurrentTime(savedTime);
+}
